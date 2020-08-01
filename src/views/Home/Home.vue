@@ -6,9 +6,11 @@
 	el-row
 		el-col.col_search(:span="24")
 			el-form(:model="search" ref="search" label-position='left')
-				el-row
+				el-row(:gutter="15")
 					el-col(:span="10")
 						el-input(placeholder="Buscar por nombre o por posición" prefix-icon="el-icon-search" v-model="search.search" @input="searchFunction")
+					el-col(:span="10")
+						p Tiene {{ quantity && quantity === 1 ? quantity + ' jugador': quantity + ' jugadores'}}
 		el-col(:span="24")
 			el-table(:data="search.search===''?tableData:TableSearch" border style="width: 100%" v-loading="loading")
 				el-table-column(prop="fullName" label="Nombre Completo")
@@ -17,7 +19,7 @@
 					template(slot-scope="scope")
 						el-button-group
 							el-button(size="mini" type="primary" icon="el-icon-plus" @click="increase(scope.$index, scope.row)" plain)
-							el-input(size="mini" :value="scope.row.goals" placeholder="Nombre Completo")
+							el-input(size="mini" :value="scope.row.goals" placeholder="Nombre Completo" readonly)
 							el-button(size="mini" type="danger" icon="el-icon-minus" @click="decrease(scope.$index, scope.row)" plain)
 				el-table-column(prop="registrationDate" label="Fecha de registro")
 				el-table-column(label="Acciones")
@@ -28,6 +30,7 @@
 
 <script>
 // @ is an alias to /src
+import { EventBus } from '../../global/index';
 import { players } from '../../firebase/firebase'
 export default {
 	name: 'Home',
@@ -37,11 +40,16 @@ export default {
 	data () {
 		return {
 			loading: false,
-			tableData: null,
-			TableSearch:null,
+			tableData: [],
+			TableSearch: [],
 			search:{
 				search:''
 			},
+		}
+	},
+	computed: {
+		quantity: function () {
+			return this.search.search===''?this.tableData.length:this.TableSearch.length;
 		}
 	},
 	methods: {
@@ -62,7 +70,7 @@ export default {
 						goals:playerData[i].goals,
 						state:playerData[i].state,
 						registrationDate:playerData[i].registrationDate,
-						updateRegister:playerData[i].updateRegister? playerData[i].updateRegister:'no data',
+						updateRegister:playerData[i].updateRegister? playerData[i].updateRegister:'no update',
 						itemId:i
 					})
 				}
@@ -80,13 +88,18 @@ export default {
 			const validateResult = this.matchesResults(e);
 			this.TableSearch = validateResult;
 		},
+		handleEdit(idx, elem){
+			this.$router.push({name: 'PlayerForm', params: {'id': elem}});
+		},
 		handleDelete(idx, elem){
 			this.$confirm('estas seguro de eliminar?')
 				.then(() => {
 					players.child(elem.itemId).remove();
+					EventBus.$emit('notify', 'Success', 'Se eliminó correctamente', 'success');
 				})
 				.catch(_ => {
-					console.log('error',_)
+					console.log('error',_);
+					EventBus.$emit('notify', 'Error', 'Hubo un error', 'error');
 				});
 		},
 		increase(idx, data) {
@@ -105,6 +118,9 @@ export default {
 <style lang="stylus">
 .col_search
 	margin-bottom 15px
+	text-align left
+	p
+		padding-top 9px
 .list_source
 	margin-top 0
 	margin-bottom 40px
@@ -124,6 +140,4 @@ export default {
 			&__inner
 				border-radius 0
 				text-align center
-	&--default
-		float none !important
 </style>

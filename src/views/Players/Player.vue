@@ -26,6 +26,7 @@
 </template>
 <script>
 // @ is an alias to /src
+import { EventBus } from '../../global/index';
 import { players } from '../../firebase/firebase'
 export default {
 	name: 'PlayerForm',
@@ -69,7 +70,7 @@ export default {
 				if(snapshot.val() && snapshot.val().fullName){
 					self.ruleForm = snapshot.val();
 				}else{
-					self.notify('Error', 'Hubo un error', 'error');
+					EventBus.$emit('notify', 'Error', 'Hubo un error', 'error');
 					self.$router.push('/');
 				}
 				self.loading= false;
@@ -89,7 +90,7 @@ export default {
 				players.child(self.idPlayer).update(self.ruleForm).then(()=>{
 					self.loading = false;
 					self.$router.push('/');
-					self.notify('Success', 'Se actualizó correctamente', 'success');
+					EventBus.$emit('notify', 'Success', 'Se actualizó correctamente', 'success');
 				});
 			}else{
 				self.ruleForm.registrationDate = year + "-" + month + "-" + day + " " + hour + ":" + minute;
@@ -97,17 +98,9 @@ export default {
 					self.loading = false;
 					self.$refs.ruleForm.resetFields();
 					self.$router.push('/');
-					self.notify('Success', 'Se creó correctamente', 'success');
+					EventBus.$emit('notify', 'Success', 'Se creó correctamente', 'success');
 				})
 			}
-		},
-		notify(title, message, type) {
-			this.$notify({
-				title,
-				message,
-				type,
-				duration: 5000
-			});
 		},
 		validateForm(){
 			let self = this;
