@@ -1,19 +1,15 @@
-<template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+ <template lang="pug">
+#wrapper
+	router-view
+	router-view(name="containerBlock")
+	router-view(name="footer")
 </template>
 
 <style lang="stylus">
-#app
-  font-family Avenir, Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
+#wrapper
+	font-family Avenir, Helvetica, Arial, sans-serif
+	-webkit-font-smoothing antialiased
+	-moz-osx-font-smoothing grayscale
+	text-align center
+	color #2c3e50
 </style>
