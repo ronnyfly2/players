@@ -53,11 +53,11 @@ export default {
 	created () {
 		if(this.idPlayer != 0){
 			this.loading= true;
-			this.getPlayer()
+			this.getPlayer();
 		}
 		document.addEventListener("keydown", (e) => {
 			if(e.keyCode == 13){
-				e.preventDefault()
+				e.preventDefault();
 			}
 		});
 	},
@@ -66,7 +66,12 @@ export default {
 			let self = this;
 			players.child(self.idPlayer).once('value')
 			.then( snapshot => {
-				self.ruleForm = snapshot.val();
+				if(snapshot.val() && snapshot.val().fullName){
+					self.ruleForm = snapshot.val();
+				}else{
+					self.notify('Error', 'Hubo un error', 'error');
+					self.$router.push('/');
+				}
 				self.loading= false;
 			});
 		},

@@ -13,7 +13,12 @@
 			el-table(:data="search.search===''?tableData:TableSearch" border style="width: 100%" v-loading="loading")
 				el-table-column(prop="fullName" label="Nombre Completo")
 				el-table-column(prop="positionPlayer" label="Posición")
-				el-table-column(prop="goals" label="Goles")
+				el-table-column(label="Goles")
+					template(slot-scope="scope")
+						el-button-group
+							el-button(size="mini" type="primary" icon="el-icon-plus" @click="increase(scope.$index, scope.row)" plain)
+							el-input(size="mini" :value="scope.row.goals" placeholder="Nombre Completo")
+							el-button(size="mini" type="danger" icon="el-icon-minus" @click="decrease(scope.$index, scope.row)" plain)
 				el-table-column(prop="registrationDate" label="Fecha de registro")
 				el-table-column(label="Acciones")
 					template(slot-scope="scope")
@@ -56,7 +61,8 @@ export default {
 						positionPlayer:playerData[i].positionPlayer,
 						goals:playerData[i].goals,
 						state:playerData[i].state,
-						idUserDat:playerData[i].idUserDat,
+						registrationDate:playerData[i].registrationDate,
+						updateRegister:playerData[i].updateRegister? playerData[i].updateRegister:'no data',
 						itemId:i
 					})
 				}
@@ -74,9 +80,6 @@ export default {
 			const validateResult = this.matchesResults(e);
 			this.TableSearch = validateResult;
 		},
-		handleEdit(idx, elem){
-			this.$router.push({name: 'PlayerForm', params: {'id': elem}});
-		},
 		handleDelete(idx, elem){
 			this.$confirm('estas seguro de eliminar?')
 				.then(() => {
@@ -86,6 +89,16 @@ export default {
 					console.log('error',_)
 				});
 		},
+		increase(idx, data) {
+			data.goals = parseInt(data.goals) + 1;
+			players.child(data.itemId).update(data);
+		},
+		decrease(idx, data) {
+			if(parseInt(data.goals)>0){
+				data.goals = parseInt(data.goals) - 1;
+				players.child(data.itemId).update(data);
+			}
+		}
 	}
 }
 </script>
@@ -101,4 +114,16 @@ export default {
 	width 100%
 .el-form-item.search_items
 	margin-bottom 0
+.el-button
+	float none !important
+	&-group
+		text-align center
+		.el-input
+			width 30%
+			float none
+			&__inner
+				border-radius 0
+				text-align center
+	&--default
+		float none !important
 </style>
