@@ -17,9 +17,8 @@
 
 <script>
 // @ is an alias to /src
-//-import { EventBus } from '../../global/index';
 import Team from '@/components/Team/Team.vue';
-import { players } from '../../firebase/firebase';
+import { players } from '@/firebase/firebase';
 export default {
 	name: 'Home',
 	components:{
@@ -97,14 +96,4 @@ export default {
 	width 100%
 .el-form-item.search_items
 	margin-bottom 0
-.el-button
-	float none !important
-	&-group
-		text-align center
-		.el-input
-			width 30%
-			float none
-			&__inner
-				border-radius 0
-				text-align center
 </style>
