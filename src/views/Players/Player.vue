@@ -3,6 +3,8 @@
 	el-row.list_source
 		el-col(:span="24")
 			h1 Formulario
+		el-col(:span="24")
+			el-page-header(@back="goBack" :content="ruleForm.fullName?ruleForm.fullName:''")
 	el-row
 		el-col(:span="24")
 			el-form(:model="ruleForm" :rules="rules" ref="ruleForm" label-position='left' v-loading="loading")
@@ -125,6 +127,9 @@ export default {
 				}
 			});
 		},
+		goBack(){
+			this.$router.push('/');
+		}
 	}
 }
 

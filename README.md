@@ -1,6 +1,6 @@
 # players
 
-## Respuesta
+## Respuesta (Se te entrega un token de una api pagada, ¿donde almacenarías el registro para utilizarlo?)
 ```
 En una variable de entorno (env).
 ```

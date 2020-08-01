@@ -26,3 +26,15 @@ export default {
 	}
 }
 </script>
+<style lang="stylus">
+.el-button
+	float none !important
+	&-group
+		text-align center
+		.el-input
+			width 30%
+			float none
+			&__inner
+				border-radius 0
+				text-align center
+</style>

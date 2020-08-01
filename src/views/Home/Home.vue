@@ -87,13 +87,4 @@ export default {
 	text-align left
 	p
 		padding-top 9px
-.list_source
-	margin-top 0
-	margin-bottom 40px
-	padding-top 30px
-.el-date-editor.el-input
-.el-date-editor.el-input__inner
-	width 100%
-.el-form-item.search_items
-	margin-bottom 0
 </style>
